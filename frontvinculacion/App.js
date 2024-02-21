@@ -6,6 +6,7 @@ import Start from './src/components/Start';
 import SignIn from './src/components/SignIn';
 import Register from './src/components/Register';
 import Dashboard from './src/components/Dashboard';
+import FormularioFema from './src/components/FormularioFema'
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ const App = () => {
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="Start" component={Start} />
          <Stack.Screen name="Register" component={Register} /> 
+         <Stack.Screen name="FormularioFema" component={FormularioFema} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -9,7 +9,9 @@ const Dashboard = () => {
   const handleCardPress = (routeName) => {
     navigation.navigate(routeName);
   };
-
+  const handleFormularioPress = () => {
+    navigation.navigate('FormularioFema');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
@@ -37,7 +39,7 @@ const Dashboard = () => {
 
         <TouchableOpacity
           style={styles.card}
-          onPress={() => handleCardPress('FEMA')}
+          onPress={handleFormularioPress}
         >
           <MaterialCommunityIcons name="newspaper-check" size={30} color="#001f3f" />
           <Text style={styles.cardText}>FEMA</Text>

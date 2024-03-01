@@ -1,16 +1,30 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
-
+import axios from 'axios';
 
 const SignIn = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    navigation.navigate('Dashboard');
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('https://localhost:7040/Auth/login', {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        navigation.navigate('Dashboard');
+      } else {
+        Alert.alert('Error', 'Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error al procesar la solicitud:', error.message);
+      Alert.alert('Error', 'Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
+    }
   };
 
   return (
@@ -26,17 +40,21 @@ const SignIn = () => {
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
+            value={email}
+            onChangeText={setEmail}
           />
           <Text style={styles.forgotLink} onPress={() => navigation.navigate('ForgotUsername')}>
-            Forgot your username?
+            ¿Olvidaste tu nombre de usuario?
           </Text>
           <TextInput
             placeholder="Password"
             secureTextEntry
             style={styles.input}
+            value={password}
+            onChangeText={setPassword}
           />
           <Text style={styles.forgotLink} onPress={() => navigation.navigate('ForgotPassword')}>
-            Forgot your password?
+            ¿Olvidaste tu contraseña?
           </Text>
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <MaterialCommunityIcons name="lock-open" size={24} color="white" />

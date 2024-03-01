@@ -19,7 +19,21 @@ const FormularioFema = ({ navigation }) => {
   const handleNext = () => {
     // Aquí puedes realizar validaciones o enviar los datos a la siguiente parte del formulario
     // Por ahora, solo navegaré a una pantalla ficticia llamada 'FormularioParte2'
-    navigation.navigate('FormularioParte2');
+   // navigation.navigate('FormularioParte2');
+    navigation.navigate('FormularioFema2', {
+    direccion,
+    zip,
+    otrasIdentificaciones,
+    nombreEdificio,
+    uso,
+    latitud,
+    longitud,
+    inspector,
+    fecha,
+    hora,
+    files1,
+    files2,
+   });
   };
   
   const handleDrop1 = (acceptedFiles) => {

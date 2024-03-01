@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Picker } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
+import axios from 'axios'; 
 
 const Register = () => {
   const navigation = useNavigation();
@@ -28,11 +30,17 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    navigation.navigate('SignIn');
+  
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('https://localhost:7040/Users/CrearUsuario', formState);
+      console.log('Response:', response.data);
+       navigation.navigate('SignIn');
+    } catch (error) {
+      console.error('Error:', error);
+     }
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>

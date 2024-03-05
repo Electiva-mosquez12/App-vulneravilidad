@@ -31,16 +31,29 @@ const Register = () => {
   };
 
   
-  const handleSubmit = async () => {
+ /* const handleSubmit = async () => {
     try {
+      console.log("he aqqui", formState);
       const response = await axios.post('https://localhost:7040/Users/CrearUsuario', formState);
       console.log('Response:', response.data);
        navigation.navigate('SignIn');
     } catch (error) {
       console.error('Error:', error);
      }
+  };*/
+  
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('https://localhost:7040/Users/CrearUsuario', formState);
+      console.log('Response:', response.data);
+      navigation.navigate('SignIn');
+    } catch (error) {
+      console.error('Axios Error:', error.message);
+      console.error('Error Details:', error.response);
+    }
   };
   
+
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>

@@ -7,7 +7,9 @@ import SignIn from './src/components/SignIn';
 import Register from './src/components/Register';
 import Dashboard from './src/components/Dashboard';
 import FormularioFema from './src/components/FormularioFema';
-import FormularioFema2 from './src/components/FormularioFema2'
+import FormularioFema2 from './src/components/FormularioFema2';
+import FormularioFema3 from './src/components/FormularioFema3';
+import FormularioFema4 from './src/components/FormularioFema4';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +24,8 @@ const App = () => {
          <Stack.Screen name="Register" component={Register} /> 
          <Stack.Screen name="FormularioFema" component={FormularioFema} /> 
          <Stack.Screen name="FormularioFema2" component={FormularioFema2} /> 
+         <Stack.Screen name="FormularioFema3" component={FormularioFema3} /> 
+         <Stack.Screen name="FormularioFema4" component={FormularioFema4} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

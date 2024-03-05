@@ -35,7 +35,7 @@ const FormularioFema2 = ({ route, navigation }) => {
   const handleNext = () => {
     // Puedes realizar validaciones o enviar los datos a la siguiente parte del formulario
     // Por ahora, solo navegaré a una pantalla ficticia llamada 'FormularioParte3'
-    navigation.navigate('FormularioParte3', {
+    navigation.navigate('FormularioFema3', {
       direccion,
       zip,
       otrasIdentificaciones,

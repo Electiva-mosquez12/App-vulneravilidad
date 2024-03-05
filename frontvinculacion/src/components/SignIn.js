@@ -6,13 +6,13 @@ import axios from 'axios';
 
 const SignIn = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
+  const [nombre, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
     try {
       const response = await axios.post('https://localhost:7040/Auth/login', {
-        email,
+        nombre,
         password,
       });
 
@@ -40,7 +40,7 @@ const SignIn = () => {
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
-            value={email}
+            value={nombre}
             onChangeText={setEmail}
           />
           <Text style={styles.forgotLink} onPress={() => navigation.navigate('ForgotUsername')}>

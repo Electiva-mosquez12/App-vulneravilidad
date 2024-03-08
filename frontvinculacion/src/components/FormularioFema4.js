@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Picker, TextInput, CheckBox, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { CheckBox } from 'react-native-elements';
 
 const FormularioFema4 = ({ route, navigation }) => {
-  // Obtener datos de las pantallas anteriores
   const { params } = route;
   const {
     direccion,
@@ -42,7 +43,6 @@ const FormularioFema4 = ({ route, navigation }) => {
     resultadoFinalSL1_GT_Smin,
   } = params;
 
-  // Estados para los campos del FormularioParte4
   const [revisionExterior, setRevisionExterior] = useState('');
   const [revisionInterior, setRevisionInterior] = useState('');
   const [revisionPlanos, setRevisionPlanos] = useState('');
@@ -56,9 +56,7 @@ const FormularioFema4 = ({ route, navigation }) => {
   const [checkBox4, setCheckBox4] = useState(false);
 
   const handleNext = () => {
-    // Puedes realizar validaciones o enviar los datos a la siguiente parte del formulario
-    // Por ahora, solo navegaré a una pantalla ficticia llamada 'FormularioParte5'
-    navigation.navigate('FormularioParte5', {
+    navigation.navigate('FormularioFema5', {
       direccion,
       zip,
       otrasIdentificaciones,
@@ -110,96 +108,104 @@ const FormularioFema4 = ({ route, navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Formulario FEMA P-154</Text>
-      <Text style={styles.subtitle}>Extensión de la revisión</Text>
+      <View>
+        <Text style={styles.title}>Formulario FEMA P-154</Text>
+        <Text style={styles.subtitle}>Extensión de la revisión</Text>
 
-      {/* Selects */}
-      <Picker
-        style={styles.input}
-        selectedValue={revisionExterior}
-        onValueChange={(itemValue) => setRevisionExterior(itemValue)}
-      >
-        <Picker.Item label="Exterior" value="exterior" />
-        {/* Agrega más opciones según sea necesario */}
-      </Picker>
+        <View style={styles.pickerContainer}>
+          <Picker
+            style={[styles.input, styles.picker]}
+            selectedValue={revisionExterior}
+            onValueChange={(itemValue) => setRevisionExterior(itemValue)}
+          >
+            <Picker.Item label="Exterior" value="exterior" />
+          </Picker>
 
-      <Picker
-        style={styles.input}
-        selectedValue={revisionInterior}
-        onValueChange={(itemValue) => setRevisionInterior(itemValue)}
-      >
-        <Picker.Item label="Interior" value="interior" />
-        {/* Agrega más opciones según sea necesario */}
-      </Picker>
+          <Picker
+            style={[styles.input, styles.picker]}
+            selectedValue={revisionInterior}
+            onValueChange={(itemValue) => setRevisionInterior(itemValue)}
+          >
+            <Picker.Item label="Interior" value="interior" />
+          </Picker>
 
-      <Picker
-        style={styles.input}
-        selectedValue={revisionPlanos}
-        onValueChange={(itemValue) => setRevisionPlanos(itemValue)}
-      >
-        <Picker.Item label="Revisión planos: Sí" value="si" />
-        <Picker.Item label="Revisión planos: No" value="no" />
-      </Picker>
+          <Picker
+            style={[styles.input, styles.picker]}
+            selectedValue={revisionPlanos}
+            onValueChange={(itemValue) => setRevisionPlanos(itemValue)}
+          >
+            <Picker.Item label="Revisión planos: Sí" value="si" />
+            <Picker.Item label="Revisión planos: No" value="no" />
+          </Picker>
+        </View>
+      </View>
 
-      {/* Inputs */}
-      <TextInput
-        style={styles.input}
-        placeholder="Fuente del tipo de suelo"
-        value={fuenteTipoSuelo}
-        onChangeText={(text) => setFuenteTipoSuelo(text)}
-      />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Fuente de peligros geológicos 1"
-        value={fuentePeligrosGeologicos1}
-        onChangeText={(text) => setFuentePeligrosGeologicos1(text)}
-      />
+      <View style={styles.part2}>
+        <TextInput
+          style={styles.input}
+          placeholder="Fuente del tipo de suelo"
+          value={fuenteTipoSuelo}
+          onChangeText={(text) => setFuenteTipoSuelo(text)}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Fuente de peligros geológicos 2"
-        value={fuentePeligrosGeologicos2}
-        onChangeText={(text) => setFuentePeligrosGeologicos2(text)}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Fuente de peligros geológicos 1"
+          value={fuentePeligrosGeologicos1}
+          onChangeText={(text) => setFuentePeligrosGeologicos1(text)}
+        />
 
-      <Text style={styles.subtitle}>Otros Peligros</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Fuente de peligros geológicos 2"
+          value={fuentePeligrosGeologicos2}
+          onChangeText={(text) => setFuentePeligrosGeologicos2(text)}
+        />
+      </View>
 
-      {/* Pregunta y Checkboxes */}
-      <Text>¿Hay peligros que desencadenan una evaluación estructural detallada?</Text>
-      <CheckBox
-        value={evaluacionDetallada}
-        onValueChange={(newValue) => setEvaluacionDetallada(newValue)}
-      />
-      <Text>1. Posible golpeteo entre edificios</Text>
-      <CheckBox
-        value={checkBox1}
-        onValueChange={(newValue) => setCheckBox1(newValue)}
-      />
-      <Text>2. Riesgo de caída de edificios adyacentes más altos</Text>
-      <CheckBox
-        value={checkBox2}
-        onValueChange={(newValue) => setCheckBox2(newValue)}
-      />
-      <Text>3. Peligro geológico o Suelo tipo F</Text>
-      <CheckBox
-        value={checkBox3}
-        onValueChange={(newValue) => setCheckBox3(newValue)}
-      />
-      <Text>4. Daños significativos/deterioro del sistema estructural</Text>
-      <CheckBox
-        value={checkBox4}
-        onValueChange={(newValue) => setCheckBox4(newValue)}
-      />
+      <View>
+        <Text style={styles.subtitle}>Otros Peligros</Text>
 
-      {/* Botones de Navegación */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.prevButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.nextButtonText}>←</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextButtonText}>→</Text>
-        </TouchableOpacity>
+        <CheckBox
+          title="¿Hay peligros que desencadenan una evaluación estructural detallada?"
+          checked={evaluacionDetallada}
+          onPress={() => setEvaluacionDetallada(!evaluacionDetallada)}
+        />
+
+        <CheckBox
+          title="Posible golpeteo entre edificios"
+          checked={checkBox1}
+          onPress={() => setCheckBox1(!checkBox1)}
+        />
+
+        <CheckBox
+          title="Riesgo de caída de edificios adyacentes más altos"
+          checked={checkBox2}
+          onPress={() => setCheckBox2(!checkBox2)}
+        />
+
+        <CheckBox
+          title="Peligro geológico o Suelo tipo F"
+          checked={checkBox3}
+          onPress={() => setCheckBox3(!checkBox3)}
+        />
+
+        <CheckBox
+          title="Daños significativos/deterioro del sistema estructural"
+          checked={checkBox4}
+          onPress={() => setCheckBox4(!checkBox4)}
+        />
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.prevButton} onPress={() => navigation.goBack()}>
+            <Text style={styles.nextButtonText}>←</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+            <Text style={styles.nextButtonText}>→</Text>
+          </TouchableOpacity>
+        </View>
+
       </View>
     </ScrollView>
   );
@@ -209,7 +215,15 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: 'white',  // Cambia el color de fondo según tus preferencias
+    backgroundColor: 'white',
+  },
+  pickerContainer: {
+    justifyContent: 'space-between', 
+  }, picker: {
+    flex: 1,  
+    marginRight: 10,  
+  },part2:{
+    marginTop:30
   },
   title: {
     fontSize: 24,
@@ -232,7 +246,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    marginBottom: 20,
   },
   prevButton: {
     flex: 1,

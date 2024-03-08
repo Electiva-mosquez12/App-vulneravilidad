@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Picker, ScrollView, TouchableOpacity } from 'react-native';
-import Dropzone from 'react-dropzone';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as DocumentPicker from 'expo-document-picker';
 
 const FormularioFema = ({ navigation }) => {
   const [direccion, setDireccion] = useState('');
@@ -13,83 +15,73 @@ const FormularioFema = ({ navigation }) => {
   const [inspector, setInspector] = useState('');
   const [fecha, setFecha] = useState('');
   const [hora, setHora] = useState('');
-  const [files1, setFiles1] = useState([]);
-  const [files2, setFiles2] = useState([]);
+  const [file1Name, setFile1Name] = useState('');
+  const [file2Name, setFile2Name] = useState('');
 
   const handleNext = () => {
     // Aquí puedes realizar validaciones o enviar los datos a la siguiente parte del formulario
     // Por ahora, solo navegaré a una pantalla ficticia llamada 'FormularioParte2'
-   // navigation.navigate('FormularioParte2');
+    // navigation.navigate('FormularioParte2');
     navigation.navigate('FormularioFema2', {
-    direccion,
-    zip,
-    otrasIdentificaciones,
-    nombreEdificio,
-    uso,
-    latitud,
-    longitud,
-    inspector,
-    fecha,
-    hora,
-    files1,
-    files2,
-   });
-  };
-  
-  const handleDrop1 = (acceptedFiles) => {
-    setFiles1(acceptedFiles);
-    // Puedes realizar lógica adicional con los archivos seleccionados si es necesario
+      direccion,
+      zip,
+      otrasIdentificaciones,
+      nombreEdificio,
+      uso,
+      latitud,
+      longitud,
+      inspector,
+      fecha,
+      hora,
+      file1Name,
+      file2Name,
+    });
   };
 
-  const handleDrop2 = (acceptedFiles) => {
-    setFiles2(acceptedFiles);
-    // Puedes realizar lógica adicional con los archivos seleccionados si es necesario
-  };
- {/* const handleDocument1 = async () => {
+  const handleDocument1 = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync();
-      console.log(result);
-      // Aquí puedes manejar el resultado, por ejemplo, guardar el URI del documento en el estado
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/pdf', 'image/jpeg'],
+      });
+      if (result.assets.length > 0) {
+        setFile1Name(result.assets[0].name);
+      }
     } catch (error) {
       console.error(error);
     }
-  };*/
- }
- {/*
+  };
+
   const handleDocument2 = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync();
-      console.log(result);
-      // Aquí puedes manejar el resultado, por ejemplo, guardar el URI del documento en el estado
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/pdf', 'image/jpeg'],
+      });
+      if (result.assets.length > 0) {
+        setFile2Name(result.assets[0].name);
+      }
     } catch (error) {
       console.error(error);
     }
-  };*/
- }
+  };
+
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Formulario FEMA P-154</Text>
-      
+
       {/* Dos botones para cargar documentos (puedes personalizar según tus necesidades) */}
       <View style={styles.buttonContainer}>
-        <Dropzone onDrop={handleDrop1}>
-          {({ getRootProps, getInputProps }) => (
-            <TouchableOpacity {...getRootProps()} style={styles.documentButton}>
-              <input {...getInputProps()} />
-              <Text>Cargar Documento 1</Text>
-            </TouchableOpacity>
-          )}
-        </Dropzone>
-
-        <Dropzone onDrop={handleDrop2}>
-          {({ getRootProps, getInputProps }) => (
-            <TouchableOpacity {...getRootProps()} style={styles.documentButton}>
-              <input {...getInputProps()} />
-              <Text>Cargar Documento 2</Text>
-            </TouchableOpacity>
-          )}
-        </Dropzone>
+        <TouchableOpacity style={styles.documentButton} onPress={handleDocument1}>
+          <Text>Subir Documento 1 (JPG o PDF)</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.documentButton} onPress={handleDocument2}>
+          <Text>Subir Documento 2 (JPG o PDF)</Text>
+        </TouchableOpacity>
       </View>
+
+      {/* Mostrar nombre de los archivos seleccionados */}
+      {file1Name !== '' && <Text style={styles.fileName}>Archivo 1: {file1Name}</Text>}
+      {file2Name !== '' && <Text style={styles.fileName}>Archivo 2: {file2Name}</Text>}
 
       {/* Inputs y Select */}
       <TextInput
@@ -141,10 +133,7 @@ const FormularioFema = ({ navigation }) => {
       >
         <Picker.Item label="Inspector 1" value="inspector1" />
         <Picker.Item label="Inspector 2" value="inspector2" />
-        {/* Agrega más opciones según necesites */}
       </Picker>
-
-      {/* Fecha y Hora */}
       <TextInput
         style={styles.input}
         placeholder="Fecha (MM/DD/AAAA)"
@@ -158,9 +147,7 @@ const FormularioFema = ({ navigation }) => {
         onChangeText={(text) => setHora(text)}
       />
 
-      {/* Botón Siguiente */}
-     {/* <Button title="Siguiente" onPress={handleNext} />*/}
-     <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+      <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>→</Text>
       </TouchableOpacity>
     </ScrollView>

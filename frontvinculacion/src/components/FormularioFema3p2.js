@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const FormularioFema3 = ({ route, navigation }) => {
+const FormularioFema3p2 = ({ route, navigation }) => {
   // Obtener datos de las pantallas anteriores
   const { params } = route;
   const {
@@ -31,8 +31,6 @@ const FormularioFema3 = ({ route, navigation }) => {
     comentario,
   } = params;
 
-  //Console.log("help:" , params);
-
   // Estados para los campos del FormularioParte3
   const [tipoIdentificacionDNK, setTipoIdentificacionDNK] = useState('');
   const [resultadoBase, setResultadoBase] = useState('');
@@ -47,10 +45,19 @@ const FormularioFema3 = ({ route, navigation }) => {
   const [resultadoMinimoSmin, setResultadoMinimoSmin] = useState('');
   const [resultadoFinalSL1_GT_Smin, setResultadoFinalSL1_GT_Smin] = useState('');
 
+  // Calcular la altura total del contenido
+  const [contentHeight, setContentHeight] = useState(0);
+
+  useEffect(() => {
+    const screenHeight = Dimensions.get('window').height;
+    const totalContentHeight = screenHeight - 50; // Restar la altura del título y botones
+    setContentHeight(totalContentHeight);
+  }, []);
+
   const handleNext = () => {
     // Puedes realizar validaciones o enviar los datos a la siguiente parte del formulario
     // Por ahora, solo navegaré a una pantalla ficticia llamada 'FormularioParte4'
-    navigation.navigate('FormularioFema3p2', {
+    navigation.navigate('FormularioFema4', {
       direccion,
       zip,
       otrasIdentificaciones,
@@ -90,93 +97,36 @@ const FormularioFema3 = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, { minHeight: contentHeight }]}>
       <Text style={styles.title}>Formulario FEMA P-154</Text>
       <Text style={styles.subtitle}>Resultado base, modificadores y resultado final del nivel 1 de análisis, SL1</Text>
 
-      {/* Selects */}
       <Picker
         style={styles.input}
-        selectedValue={tipoIdentificacionDNK}
-        onValueChange={(itemValue) => setTipoIdentificacionDNK(itemValue)}
+        selectedValue={sueloTipoE_GT3Pisos}
+        onValueChange={(itemValue) => setSueloTipoE_GT3Pisos(itemValue)}
       >
-        <Picker.Item label="Tipo de identificación DNK: Sup" value="sup" />
-        <Picker.Item label="Tipo de identificación DNK: Inf" value="inf" />
+        <Picker.Item label="Suelo tipo E (> 3 pisos): Sup" value="sup" />
+        <Picker.Item label="Suelo tipo E (> 3 pisos): Inf" value="inf" />
       </Picker>
 
       <Picker
         style={styles.input}
-        selectedValue={resultadoBase}
-        onValueChange={(itemValue) => setResultadoBase(itemValue)}
+        selectedValue={resultadoMinimoSmin}
+        onValueChange={(itemValue) => setResultadoMinimoSmin(itemValue)}
       >
-        <Picker.Item label="Resultado base: Sup" value="sup" />
-        <Picker.Item label="Resultado base: Inf" value="inf" />
+        <Picker.Item label="Resultado mínimo, Smin: Sup" value="sup" />
+        <Picker.Item label="Resultado mínimo, Smin: Inf" value="inf" />
       </Picker>
 
       <Picker
         style={styles.input}
-        selectedValue={irregularidadVerticalSevera}
-        onValueChange={(itemValue) => setIrregularidadVerticalSevera(itemValue)}
+        selectedValue={resultadoFinalSL1_GT_Smin}
+        onValueChange={(itemValue) => setResultadoFinalSL1_GT_Smin(itemValue)}
       >
-        {/* Agrega más opciones según sea necesario */}
-        <Picker.Item label="Irregularidad vertical severa: Sup" value="sup" />
-        <Picker.Item label="Irregularidad vertical severa: Inf" value="inf" />
+        <Picker.Item label="Resul. final Nivel 1,SL1 ≥ Smin:Sup" value="sup" />
+        <Picker.Item label="Resul. final Nivel 1,SL1 ≥ Smin:Inf" value="inf" />
       </Picker>
-
-      <Picker
-        style={styles.input}
-        selectedValue={irregularidadVerticalModerada}
-        onValueChange={(itemValue) => setIrregularidadVerticalModerada(itemValue)}
-      >
-        <Picker.Item label="Irregularidad vertical moderada: Sup" value="sup" />
-        <Picker.Item label="Irregularidad vertical moderada: Inf" value="inf" />
-      </Picker>
-
-      <Picker
-        style={styles.input}
-        selectedValue={plantaIrregular}
-        onValueChange={(itemValue) => setPlantaIrregular(itemValue)}
-      >
-        <Picker.Item label="Planta irregular: Sup" value="sup" />
-        <Picker.Item label="Planta irregular: Inf" value="inf" />
-      </Picker>
-
-      <Picker
-        style={styles.input}
-        selectedValue={preCodigoSismico}
-        onValueChange={(itemValue) => setPreCodigoSismico(itemValue)}
-      >
-        <Picker.Item label="Pre- código sísmico: Sup" value="sup" />
-        <Picker.Item label="Pre- código sísmico: Inf" value="inf" />
-      </Picker>
-
-      <Picker
-        style={styles.input}
-        selectedValue={postCodigoSismico}
-        onValueChange={(itemValue) => setPostCodigoSismico(itemValue)}
-      >
-        <Picker.Item label="Post- código sísmico: Sup" value="sup" />
-        <Picker.Item label="Post- código sísmico: Inf" value="inf" />
-      </Picker>
-      {/* Desde aquí */}
-      <Picker
-        style={styles.input}
-        selectedValue={sueloTipoAoB}
-        onValueChange={(itemValue) => setSueloTipoAoB(itemValue)}
-      >
-        <Picker.Item label="Suelo tipo A o B: Sup" value="sup" />
-        <Picker.Item label="Suelo tipo A o B: Inf" value="inf" />
-      </Picker>
-
-      <Picker
-        style={styles.input}
-        selectedValue={sueloTipoE1_3Pisos}
-        onValueChange={(itemValue) => setSueloTipoE1_3Pisos(itemValue)}
-      >
-        <Picker.Item label="Suelo tipo E (1-3 pisos): Sup" value="sup" />
-        <Picker.Item label="Suelo tipo E (1-3 pisos): Inf" value="inf" />
-      </Picker>
-
 
       {/* Botones de Navegación */}
       <View style={styles.buttonContainer}>
@@ -193,7 +143,6 @@ const FormularioFema3 = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
     padding: 16,
     backgroundColor: 'white',
   },
@@ -211,10 +160,6 @@ const styles = StyleSheet.create({
   input: {
     height: 32,
     marginBottom: 8,
-  },
-  pickerContainer: {
-    flexWrap: 'wrap', // Allow pickers to wrap on smaller screens
-    flexDirection: 'row', // Arrange pickers in a row
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -244,4 +189,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormularioFema3;
+export default FormularioFema3p2;

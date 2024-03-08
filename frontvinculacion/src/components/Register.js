@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import axios from 'axios'; 
 
 const Register = () => {
   const navigation = useNavigation();
-
-  const [formState, setFormState] = useState({
-    cedula: '',
-    nombre: '',
-    apellido: '',
-    email: '',
-    telefono: '',
-    sexo: '',
-    birthdayDay: '',
-    birthdayMonth: '',
-    birthdayYear: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [cedula, setCedula] = useState('');
+  const [nombre1, setNombre1] = useState('');
+  const [nombre2, setNombre2] = useState('');
+  const [apellido1, setApellido1] = useState('');
+  const [apellido2, setApellido2] = useState('');
+  const [direccion, setDireccion] = useState('Guayaquil');
+  const [correo, setCorreo] = useState('');
+  const [celular, setCelular] = useState('');
+  const [sexo, setSexo] = useState('');
+  const [fechaNacimiento, setFechaNacimiento] = useState('');
+  const [usuario, setUsuario] = useState('');
+  const [clave, setClave] = useState('');
 
   const handleChange = (name, value) => {
     setFormState({
@@ -30,123 +26,146 @@ const Register = () => {
     });
   };
 
-  
- /* const handleSubmit = async () => {
-    try {
-      console.log("he aqqui", formState);
-      const response = await axios.post('https://localhost:7040/Users/CrearUsuario', formState);
-      console.log('Response:', response.data);
-       navigation.navigate('SignIn');
-    } catch (error) {
-      console.error('Error:', error);
-     }
-  };*/
-  
+
+  /* const handleSubmit = async () => {
+     try {
+       console.log("he aqqui", formState);
+       const response = await axios.post('https://localhost:7040/Users/CrearUsuario', formState);
+       console.log('Response:', response.data);
+        navigation.navigate('SignIn');
+     } catch (error) {
+       console.error('Error:', error);
+      }
+   };*/
+
   const handleSubmit = async () => {
+    // Verificar campos vacíos
+    if (
+      !cedula ||
+      !nombre1 ||
+      !apellido1 ||
+      !correo ||
+      !celular ||
+      !sexo ||
+      !usuario ||
+      !clave
+    ) {
+      Alert.alert('¡Revise el formulario porfavor, hay campos incompletos!');
+      return;  
+    }
+
     try {
-      const response = await axios.post('https://localhost:7040/Users/CrearUsuario', formState);
-      console.log('Response:', response.data);
-      navigation.navigate('SignIn');
+      const response = await fetch('http://192.168.200.23:7040/Users/CrearUsuario', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "idTipo": 0,
+          "tipoIdentificacion": "C",
+          "identificacion": cedula,
+          "nombre1": nombre1,
+          "nombre2": "",
+          "apellido1": apellido1,
+          "apellido2": "",
+          "direccion": "guayaquil",
+          "correo": correo,
+          "contacto": celular,
+          "sexo": sexo,
+          "fechaNacimiento": new Date().toISOString(),
+          "estado": true,
+          "userName": usuario,
+          "clave": clave,
+          "fechaCreacion": new Date().toISOString(),
+          "fechaModificacion": new Date().toISOString(),
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Response:', data);
+        navigation.navigate('SignIn');
+      } else {
+        console.log('Fetch Error:', response.statusText);
+        console.log('Error Details:', await response.text());
+      }
     } catch (error) {
-      console.error('Axios Error:', error.message);
-      console.error('Error Details:', error.response);
+      console.log('Fetch Error:', error.message);
     }
   };
-  
+
 
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <Text style={styles.heading}>Registro</Text>
         <TextInput
-          name="cedula"
-          placeholder="Cédula"
+          name="identificacion"
+          placeholder="identificacion"
           style={styles.input}
-          value={formState.cedula}
-          onChangeText={(text) => handleChange('cedula', text)}
+          value={cedula}
+          onChangeText={setCedula}
         />
         <TextInput
           name="nombre"
           placeholder="Nombre"
           style={styles.input}
-          value={formState.nombre}
-          onChangeText={(text) => handleChange('nombre', text)}
+          value={nombre1}
+          onChangeText={setNombre1}
         />
         <TextInput
           name="apellido"
           placeholder="Apellido"
           style={styles.input}
-          value={formState.apellido}
-          onChangeText={(text) => handleChange('apellido', text)}
+          value={apellido1}
+          onChangeText={setApellido1}
         />
         <TextInput
           name="email"
           placeholder="Email"
           style={styles.input}
-          value={formState.email}
-          onChangeText={(text) => handleChange('email', text)}
+          value={correo}
+          onChangeText={setCorreo}
         />
         <TextInput
           name="telefono"
           placeholder="Teléfono"
           style={styles.input}
-          value={formState.telefono}
-          onChangeText={(text) => handleChange('telefono', text)}
+          value={celular}
+          onChangeText={setCelular}
         />
         <Picker
-          selectedValue={formState.sexo}
-          onValueChange={(value) => handleChange('sexo', value)}
+          selectedValue={sexo}
+          onValueChange={setSexo}
           style={styles.picker}
         >
           <Picker.Item label="Selecciona el sexo" value="" />
-          <Picker.Item label="Masculino" value="masculino" />
-          <Picker.Item label="Femenino" value="femenino" />
+          <Picker.Item label="Masculino" value="m" />
+          <Picker.Item label="Femenino" value="f" />
         </Picker>
-        <View style={styles.birthdayContainer}>
-          <TextInput
-            name="birthdayDay"
-            placeholder="Día"
-            style={styles.birthdayInput}
-            value={formState.birthdayDay}
-            onChangeText={(text) => handleChange('birthdayDay', text)}
-          />
-          <TextInput
-            name="birthdayMonth"
-            placeholder="Mes"
-            style={styles.birthdayInput}
-            value={formState.birthdayMonth}
-            onChangeText={(text) => handleChange('birthdayMonth', text)}
-          />
-          <TextInput
-            name="birthdayYear"
-            placeholder="Año"
-            style={styles.birthdayInput}
-            value={formState.birthdayYear}
-            onChangeText={(text) => handleChange('birthdayYear', text)}
-          />
-        </View>
+
+
         <TextInput
           name="username"
           placeholder="Usuario"
           style={styles.input}
-          value={formState.username}
-          onChangeText={(text) => handleChange('username', text)}
+          value={usuario}
+          onChangeText={setUsuario}
         />
         <TextInput
           name="password"
           placeholder="Contraseña"
           secureTextEntry
           style={styles.input}
-          value={formState.password}
-          onChangeText={(text) => handleChange('password', text)}
+          value={clave}
+          onChangeText={setClave}
         />
         <TextInput
           name="confirmPassword"
           placeholder="Confirmar contraseña"
           secureTextEntry
           style={styles.input}
-          value={formState.confirmPassword}
-          onChangeText={(text) => handleChange('confirmPassword', text)}
+          value={clave}
+          onChangeText={setClave}
         />
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <MaterialCommunityIcons size={24} color="white" />
@@ -154,69 +173,70 @@ const Register = () => {
         </TouchableOpacity>
       </View>
     </View>
+
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#ffffff', // Cambiar al color deseado
-    },
-    formContainer: {
-      width: '80%',
-      maxWidth: 400,
-    },
-    heading: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 16,
-    },
-    input: {
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginBottom: 16,
-      paddingHorizontal: 10,
-    },
-    picker: {
-      height: 40,
-      marginBottom: 16,
-      borderColor: 'gray',
-      borderWidth: 1,
-    },
-    birthdayContainer: {
-      flexDirection: 'column',  // Cambiado a 'column' para apilar verticalmente
-      marginBottom: 16,
-    },
-    birthdayInputs: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    birthdayInput: {
-      flex: 1,
-      height: 40,
-      marginBottom: 8,
-      marginRight: 0,  // Ajustado para que no haya margen a la derecha
-      borderColor: 'gray',
-      borderWidth: 1,
-      paddingHorizontal: 10,
-    },
-    button: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#001f3f', // Cambiar al color deseado
-      padding: 10,
-      borderRadius: 5,
-      marginTop: 16,
-    },
-    buttonText: {
-      color: 'white',
-      marginLeft: 120,
-      textAlign: 'center',
-    },
-  });
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff', // Cambiar al color deseado
+  },
+  formContainer: {
+    width: '80%',
+    maxWidth: 400,
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingHorizontal: 10,
+  },
+  picker: {
+    height: 40,
+    marginBottom: 16,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  birthdayContainer: {
+    flexDirection: 'column',
+    marginBottom: 16,
+  },
+  birthdayInputs: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  birthdayInput: {
+    flex: 1,
+    height: 40,
+    marginBottom: 8,
+    marginRight: 0,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#001f3f',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 16,
+  },
+  buttonText: {
+    color: 'white',
+    marginLeft: 120,
+    textAlign: 'center',
+  },
+});
 
 export default Register;

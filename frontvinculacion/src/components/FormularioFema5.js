@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, CheckBox, Picker, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { CheckBox } from 'react-native-elements';
 
 const FormularioFema5 = ({ route, navigation }) => {
   // Obtener datos de las pantallas anteriores
@@ -47,21 +49,21 @@ const FormularioFema5 = ({ route, navigation }) => {
     fuentePeligrosGeologicos1,
     fuentePeligrosGeologicos2,
     evaluacionDetallada,
-    checkBox1,
-    checkBox2,
-    checkBox3,
-    checkBox4,
   } = params;
 
+  const [checkBox1, setCheckBox1] = useState(false);
+  const [checkBox2, setCheckBox2] = useState(false);
+  const [checkBox3, setCheckBox3] = useState(false);
+  const [checkBox4, setCheckBox4] = useState(false);
   // Estados para los campos del FormularioParte5
   const [accionRequerida, setAccionRequerida] = useState('');
   const [evaluacionDetalladaElementosNoEstructurales, setEvaluacionDetalladaElementosNoEstructurales] = useState('');
   const [inspeccionNivel2, setInspeccionNivel2] = useState('');
 
   const handleGuardar = () => {
-    // Puedes agregar lógica para guardar los datos si es necesario
-    // Por ahora, solo navegaré a una pantalla ficticia llamada 'FormularioGuardado'
-    navigation.navigate('FormularioGuardado', {
+    console.log("Formulario Guardado");
+
+    /*navigation.navigate('FormularioGuardado', {
       direccion,
       zip,
       otrasIdentificaciones,
@@ -111,7 +113,7 @@ const FormularioFema5 = ({ route, navigation }) => {
       accionRequerida,
       evaluacionDetalladaElementosNoEstructurales,
       inspeccionNivel2,
-    });
+    });*/
   };
 
   return (
@@ -119,28 +121,27 @@ const FormularioFema5 = ({ route, navigation }) => {
       <Text style={styles.title}>Formulario FEMA P-154</Text>
       <Text style={styles.subtitle}>Acción requerida</Text>
 
-      {/* Preguntas y Checkboxes */}
       <Text>¿Se requiere de una evaluación estructural más detallada?</Text>
       <CheckBox
-        value={checkBox1}
-        onValueChange={(newValue) => setCheckBox1(newValue)}
+        title="Si, se desconoce el tipo de edificio según FEMA"
+        checked={checkBox1}
+        onPress={() => setCheckBox1(!checkBox1)}
       />
-      <Text>1. Si, se desconoce el tipo de edificio según FEMA</Text>
       <CheckBox
-        value={checkBox2}
-        onValueChange={(newValue) => setCheckBox2(newValue)}
+        title="Si, resultado menor que el límite"
+        checked={checkBox2}
+        onPress={() => setCheckBox2(!checkBox2)}
       />
-      <Text>2. Si, resultado menor que el límite</Text>
       <CheckBox
-        value={checkBox3}
-        onValueChange={(newValue) => setCheckBox3(newValue)}
+        title="Si, otros peligros presentes"
+        checked={checkBox3}
+        onPress={() => setCheckBox3(!checkBox3)}
       />
-      <Text>3. Si, otros peligros presentes</Text>
       <CheckBox
-        value={checkBox4}
-        onValueChange={(newValue) => setCheckBox4(newValue)}
+        title="No"
+        checked={checkBox4}
+        onPress={() => setCheckBox4(!checkBox4)}
       />
-      <Text>4. No</Text>
 
       <Text>¿Se requiere una evaluación detallada de elementos no estructurales?</Text>
       <Picker
@@ -148,10 +149,10 @@ const FormularioFema5 = ({ route, navigation }) => {
         selectedValue={evaluacionDetalladaElementosNoEstructurales}
         onValueChange={(itemValue) => setEvaluacionDetalladaElementosNoEstructurales(itemValue)}
       >
-        <Picker.Item label="1. Si, hay peligro de caída de elementos" value="siPeligroCaidaElementos" />
-        <Picker.Item label="2. No, existe amenaza de elementos no estructurales y deben ser mitigados, pero la evaluación detallada no es necesaria" value="noAmenazaMitigada" />
-        <Picker.Item label="3. No, no existe peligro de elementos no estructurales" value="noPeligroElementos" />
-        <Picker.Item label="4. No, se sabe" value="noSabe" />
+        <Picker.Item label="Si, hay peligro de caída de elementos" value="siPeligroCaidaElementos" />
+        <Picker.Item label="No, existe amenaza de elementos no estructurales y deben ser mitigados, pero la evaluación detallada no es necesaria" value="noAmenazaMitigada" />
+        <Picker.Item label="No, no existe peligro de elementos no estructurales" value="noPeligroElementos" />
+        <Picker.Item label="No, se sabe" value="noSabe" />
       </Picker>
 
       <Text>¿Se requiere de una inspección de Nivel 2?</Text>
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: 'white',  // Cambia el color de fondo según tus preferencias
+    backgroundColor: 'white',   
   },
   title: {
     fontSize: 24,

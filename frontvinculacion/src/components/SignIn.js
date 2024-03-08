@@ -2,27 +2,32 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 
 const SignIn = () => {
   const navigation = useNavigation();
   const [nombre, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async () => {
+  const handleSubmit = async () => {    
     try {
-      const response = await axios.post('https://localhost:7040/Auth/login', {
-        nombre,
-        password,
+      const response = await fetch('http://192.168.200.23:7040/Auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "nombre": nombre,
+          "password": password,
+        }),
       });
 
-      if (response.status === 200) {
+      if (response.ok) {
         navigation.navigate('Dashboard');
       } else {
         Alert.alert('Error', 'Credenciales incorrectas. Por favor, inténtalo de nuevo.');
       }
     } catch (error) {
-      console.error('Error al procesar la solicitud:', error.message);
+      console.console('Error al procesar la solicitud:', error.message);
       Alert.alert('Error', 'Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
     }
   };
@@ -74,9 +79,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#001f3f',
   },
   icon: {
-    marginBottom: 20, // Ajuste para reducir la separación entre el ícono y el contenedor blanco
+    marginBottom: 20,
   },
-
   paper: {
     padding: 20,
     width: '80%',

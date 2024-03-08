@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Picker, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet,ScrollView, TouchableOpacity } from 'react-native';
 import Dropzone from 'react-dropzone';
+import { Picker } from '@react-native-picker/picker';
 
 const FormularioFema2 = ({ route, navigation }) => {
   const [numPisos, setNumPisos] = useState('');
@@ -140,7 +141,6 @@ const FormularioFema2 = ({ route, navigation }) => {
         value={comentario}
         onChangeText={(text) => setComentario(text)}
       />
-
       {/* Botones de Navegación */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.prevButton} onPress={() => navigation.goBack()}>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    marginTop: 0,
   },
   prevButton: {
     flex: 1,

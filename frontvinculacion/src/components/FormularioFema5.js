@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity,Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
 
@@ -61,7 +61,17 @@ const FormularioFema5 = ({ route, navigation }) => {
   const [inspeccionNivel2, setInspeccionNivel2] = useState('');
 
   const handleGuardar = () => {
-    console.log("Formulario Guardado");
+    Alert.alert(
+      "¡Formulario guardado con éxito!",
+      "",
+      [
+          {
+              text: "Ok",
+              onPress: () => navigation.navigate('Dashboard')
+          }
+      ],
+      { cancelable: false }
+  );
 
     /*navigation.navigate('FormularioGuardado', {
       direccion,

@@ -55,7 +55,7 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch('http://192.168.200.23:7040/Users/CrearUsuario', {
+      const response = await fetch('http://localhost:7040/Users/CrearUsuario', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

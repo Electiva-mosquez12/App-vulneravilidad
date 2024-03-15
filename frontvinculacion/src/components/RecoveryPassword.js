@@ -1,69 +1,62 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const SignIn = () => {
+const RecoveryPassword = () => {
   const navigation = useNavigation();
-  const [nombre, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [correo, setCorreo] = useState('');
 
-  const handleSubmit = async () => {    
+  const handleSendEmail = async () => {    
+    if (
+        !correo 
+      ) {
+        Alert.alert('¡Revise correo porfavor, esta incompleto!');
+        return;  
+      }
     try {
-      const response = await fetch('http://localhost:7040/Auth/login', {
-        method: 'POST',
+        const response = await fetch(`http://localhost:7040/Users/Recuperacion/${correo}?motivo=CLAVE`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          "nombre": nombre,
-          "password": password,
-        }),
       });
-
       if (response.ok) {
-        navigation.navigate('Dashboard');
+        const data = await response.json();
+        console.log('Response:', data);
+        navigation.navigate('SignIn');
       } else {
-        Alert.alert('Error', 'Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+        console.log('Fetch Error:', response.statusText);
+        console.log('Error Details:', await response.text());
       }
+      // Aquí deberías enviar la solicitud para recuperar la contraseña con el correo electrónico ingresado
+      // Por ahora, simplemente mostraremos un mensaje de éxito
+    // Alert.alert('Mensaje enviado', 'Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.');
     } catch (error) {
       console.console('Error al procesar la solicitud:', error.message);
-      Alert.alert('Error', 'Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
+      Alert.alert('Error', 'Ha ocurrido un error al enviar el correo electrónico. Por favor, inténtalo de nuevo más tarde.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <MaterialIcons name="description" size={60} color="white" style={styles.icon} />
+      <MaterialCommunityIcons name="lock-reset" size={60} color="white" style={styles.icon} />
       <View style={styles.paper}>
         <View style={styles.headingContainer}>
-          <Text style={styles.heading}>Bienvenido</Text>
+          <Text style={styles.heading}>Recuperación de contraseña</Text>
         </View>
         <View style={styles.formContainer}>
           <TextInput
-            placeholder="Email"
+            placeholder="Correo electrónico"
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
-            value={nombre}
-            onChangeText={setEmail}
+            value={correo}
+            onChangeText={setCorreo}
           />
-          <Text style={styles.forgotLink} onPress={() => navigation.navigate('ForgotUsername')}>
-            ¿Olvidaste tu nombre de usuario?
-          </Text>
-          <TextInput
-            placeholder="Password"
-            secureTextEntry
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-          />
-          <Text style={styles.forgotLink} onPress={() => navigation.navigate('RecoveryPassword')}>
-            ¿Olvidaste tu contraseña?
-          </Text>
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <MaterialCommunityIcons name="lock-open" size={24} color="white" />
-            <Text style={styles.buttonText}>Iniciar Sesión</Text>
+          <TouchableOpacity style={styles.button} onPress={handleSendEmail}>
+            <MaterialCommunityIcons name="email-send" size={24} color="white" />
+            <Text style={styles.buttonText}>Enviar</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -107,11 +100,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
-  forgotLink: {
-    color: '#001f3f',
-    textDecorationLine: 'underline',
-    marginTop: 5,
-  },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -127,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+export default RecoveryPassword;
